@@ -4,3 +4,8 @@
 # MUSS MIT TABULATOREN GESCHRIEBEN WERDEN !!
 
 GET     /products/                    controllers.Products.list
+POST    /products/new                 controllers.Products.newProduct
+
+# TODO
+#GET  /products/:ean  controllers.Products.details(ean: String)
+#POST /products/      controllers.Products.save

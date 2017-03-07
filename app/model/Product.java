@@ -38,6 +38,8 @@ public class Product {
         return String.format("%s - %s", ean, name);
     }
 
+
+
     //-----------------------------------
     // DAO Methoden
     //-----------------------------------
@@ -46,4 +48,15 @@ public class Product {
         return products;
     }
 
+    public static void addProduct(Product newProduct) {
+        products.add(newProduct);
+    }
+
+    public static Product findProduct(String searchEAN) {
+        for (Product product : products) {
+            if (product.ean.equals(searchEAN)) {
+                return product;
+            }
+        }
+    }
 }
