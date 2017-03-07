@@ -26,6 +26,7 @@ public class Products extends Controller{
     // das NEUE PLAY Framework verlangt hier im Controller KEINE STATISCHEN METHODEN, ergibt sonst Fehler!
 
 
+
     private Database db;
 
     @Inject
@@ -42,7 +43,7 @@ public class Products extends Controller{
         Connection connection = db.getConnection();
         Statement stmt = null;
 
-        // zentrale liste aller produkte
+        // temporaere liste aller produkte
         List<Product> products = new ArrayList<Product>();
 
         try {
@@ -64,7 +65,6 @@ public class Products extends Controller{
             e.printStackTrace();
         }
 
-
         //List<Product> products = Product.findAll();
 
         // JsonNode : Jackson
@@ -84,7 +84,7 @@ public class Products extends Controller{
     public Result newProduct() {
         JsonNode json = request().body().asJson();
         Product newProduct = Json.fromJson(json, Product.class);
-        // zur Produktliste hinzufuegen!
+        // zur Produktliste hinzufuegen!  TODO hier auch JDBC einbauen
         Product.addProduct(newProduct);
         // man kann es wieder zurueckgeben, ist aber eine Designfrage
         return ok(Json.toJson(newProduct));
