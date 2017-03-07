@@ -23,6 +23,7 @@ public class Product {
     }
 
     // Attribute
+    public int id;
     public String ean;
     public String name;
     public String description;
@@ -34,6 +35,13 @@ public class Product {
         this.name = name;
         this.description = description;
     }
+    public Product(int id, String ean, String name, String description) {
+        this.id = id;
+        this.ean = ean;
+        this.name = name;
+        this.description = description;
+    }
+
     public String toString() {
         return String.format("%s - %s", ean, name);
     }

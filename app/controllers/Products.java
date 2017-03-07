@@ -2,9 +2,17 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import model.Product;
+import play.api.db.Database;
 import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
@@ -18,8 +26,46 @@ public class Products extends Controller{
     // das NEUE PLAY Framework verlangt hier im Controller KEINE STATISCHEN METHODEN, ergibt sonst Fehler!
 
 
+    private Database db;
+
+    @Inject
+    public Products(Database db) {
+        this.db = db;
+    }
+
+
+
+
+
     public Result list() {
-        List<Product> products = Product.findAll();
+        // get connection
+        Connection connection = db.getConnection();
+        Statement stmt = null;
+
+        // zentrale liste aller produkte
+        List<Product> products = new ArrayList<Product>();
+
+        try {
+            stmt = connection.createStatement();
+            String sql = "select * from product";
+            ResultSet rs = stmt.executeQuery(sql);
+            // extract data
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String ean = rs.getString("ean");
+                String name = rs.getString("name");
+                String description = rs.getString("description");
+                // generate new Product
+                Product product = new Product(id,ean,name,description);
+                products.add(product);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        //List<Product> products = Product.findAll();
 
         // JsonNode : Jackson
         // Json: Json Helper aus play.libs
