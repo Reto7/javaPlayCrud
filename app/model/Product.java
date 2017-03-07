@@ -10,6 +10,7 @@ public class Product {
 
 
     // Mocking Data (nur zu Testzwecken)
+    // List ist ein Interface!
     private static List<Product> products;
     // statischer Initialisierer, somit gibt es diese Variable nur 1x, egal wieviele male man instanziert
     static {
@@ -21,11 +22,12 @@ public class Product {
         products.add(new Product("5555555555555","Paperclips", "description 5"));
     }
 
-
+    // Attribute
     public String ean;
     public String name;
     public String description;
 
+    // Constructors
     public Product() {}
     public Product(String ean, String name, String description) {
         this.ean = ean;
@@ -35,4 +37,13 @@ public class Product {
     public String toString() {
         return String.format("%s - %s", ean, name);
     }
+
+    //-----------------------------------
+    //DAO Methoden
+    //-----------------------------------
+
+    public static List<Product> findAll(){
+        return products;
+    }
+
 }
