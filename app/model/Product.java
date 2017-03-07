@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by rk on 07.03.17.
+ * MODEL
  */
 public class Product {
 
@@ -39,7 +39,7 @@ public class Product {
     }
 
     //-----------------------------------
-    //DAO Methoden
+    // DAO Methoden
     //-----------------------------------
 
     public static List<Product> findAll(){

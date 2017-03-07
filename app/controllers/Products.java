@@ -1,16 +1,30 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
+import java.util.List;
+
+import model.Product;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 
 /**
- * Created by rk on 07.03.17.
+ * CONTROLLER
  */
 public class Products extends Controller{
 
-    // das NEUE PLAY Framework verlangt KEINE STATISCHEN METHODEN, ergibt sonst Fehler!
+    // das NEUE PLAY Framework verlangt hier im Controller KEINE STATISCHEN METHODEN, ergibt sonst Fehler!
+
+
     public Result list() {
-        return ok();
+        List<Product> products = Product.findAll();
+
+        // JsonNode : Jackson
+        // Json: Json Helper aus play.libs
+        JsonNode json = Json.toJson(products);
+
+        return ok(json);
     }
 
 
