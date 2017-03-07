@@ -1,7 +1,6 @@
 # Routes
 # This file defines all application routes (Higher priority routes first)
 
-GET /products/       controllers.Products.list
-#GET  /products/new   controllers.Products.newProduct
-#GET  /products/:ean  controllers.Products.details(ean: String)
-#POST /products/      controllers.Products.save
+# MUSS MIT TABULATOREN GESCHRIEBEN WERDEN !!
+
+GET     /products/                    controllers.Products.list
