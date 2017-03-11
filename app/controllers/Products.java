@@ -39,34 +39,8 @@ public class Products extends Controller{
 
 
     public Result list() {
-        // get connection
-        Connection connection = db.getConnection();
-        Statement stmt = null;
-
-        // temporaere liste aller produkte
-        List<Product> products = new ArrayList<Product>();
-
-        try {
-            stmt = connection.createStatement();
-            String sql = "select * from product";
-            ResultSet rs = stmt.executeQuery(sql);
-            // extract data
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String ean = rs.getString("ean");
-                String name = rs.getString("name");
-                String description = rs.getString("description");
-                // generate new Product
-                Product product = new Product(id,ean,name,description);
-                products.add(product);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        //List<Product> products = Product.findAll();
-
+        List<Product> products = Product.findAll();
+        //
         // JsonNode : Jackson
         // Json: Json Helper aus play.libs
         JsonNode json = Json.toJson(products);

@@ -1,5 +1,14 @@
 package model;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import play.api.db.Database;
+import play.libs.Json;
+
+import javax.inject.Inject;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +16,13 @@ import java.util.List;
  * MODEL
  */
 public class Product {
+
+    private static Database db;
+
+    @Inject
+    public Product(Database db) {
+        this.db = db;
+    }
 
 
     // Mocking Data (nur zu Testzwecken)
@@ -53,6 +69,30 @@ public class Product {
     //-----------------------------------
 
     public static List<Product> findAll(){
+// get connection
+        Connection connection = db.getConnection();
+        Statement stmt = null;
+
+        // temporaere liste aller produkte
+        List<Product> products = new ArrayList<Product>();
+
+        try {
+            stmt = connection.createStatement();
+            String sql = "select * from product";
+            ResultSet rs = stmt.executeQuery(sql);
+            // extract data
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String ean = rs.getString("ean");
+                String name = rs.getString("name");
+                String description = rs.getString("description");
+                // generate new Product
+                Product product = new Product(id,ean,name,description);
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return products;
     }
 
