@@ -3,6 +3,7 @@
 
 # MUSS MIT TABULATOREN GESCHRIEBEN WERDEN !!
 
+GET     /products                     controllers.Products.list
 GET     /products/                    controllers.Products.list
 POST    /products/new                 controllers.Products.newProduct
 
