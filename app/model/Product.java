@@ -18,6 +18,7 @@ public class Product {
 
     // List ist ein Interface!
     private static List<Product> products;
+    // statischer Initialisierer,
     static {
         products = new ArrayList<Product>();
     }
@@ -158,8 +159,6 @@ public class Product {
     public static void modifyProduct(Product modifyedProduct, Database db) {
         // in die DB schreiben
         modifyedProduct.save(db);
-        // zur Liste hinzufuegen
-        //products.add(newProduct);
     }
 
     /**
