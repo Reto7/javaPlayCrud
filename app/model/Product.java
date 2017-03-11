@@ -147,7 +147,19 @@ public class Product {
         newProduct.save(db);
         // zur Liste hinzufuegen
         products.add(newProduct);
+    }
 
+    /**
+     * MODIFYPRODUCT
+     * @param modifyedProduct
+     * Achtung! newProduct als Parameter hat noch keine ID!
+     * Diese bekommen wir von der DB zurueck
+     */
+    public static void modifyProduct(Product modifyedProduct, Database db) {
+        // in die DB schreiben
+        modifyedProduct.save(db);
+        // zur Liste hinzufuegen
+        //products.add(newProduct);
     }
 
     /**

@@ -76,11 +76,11 @@ public class Products extends Controller{
     @BodyParser.Of(BodyParser.Json.class)
     public Result modifyProduct(Integer id)  {
         JsonNode json = request().body().asJson();
-        Product newProduct = Json.fromJson(json, Product.class);
+        Product modifiedProduct = Json.fromJson(json, Product.class);
         // zur Produktliste hinzufuegen!
-        Product.addProduct(newProduct, db);
+        Product.modifyProduct(modifiedProduct, db);
         // man kann es wieder zurueckgeben, ist aber eine Designfrage
-        return ok(Json.toJson(newProduct));
+        return ok(Json.toJson(modifiedProduct));
     }
 
 
