@@ -35,9 +35,10 @@ public class Products extends Controller{
     }
 
 
-
-
-
+    /**
+     * LIST
+     * @return
+     */
     public Result list() {
         List<Product> products = Product.findAll();
         //
@@ -49,16 +50,25 @@ public class Products extends Controller{
     }
 
 
+    /**
+     * DETAILS
+     * @param ean
+     * @return
+     */
     public Result details(String ean) {
         return ok();
     }
 
+    /**
+     * NEW-PRODUCT
+     * @return
+     */
     // hiermit bekommen wir den Request Body!
     @BodyParser.Of(BodyParser.Json.class)
-    public Result newProduct() {
+    public Result newProduct()  {
         JsonNode json = request().body().asJson();
         Product newProduct = Json.fromJson(json, Product.class);
-        // zur Produktliste hinzufuegen!  TODO hier auch JDBC einbauen
+        // zur Produktliste hinzufuegen!
         Product.addProduct(newProduct);
         // man kann es wieder zurueckgeben, ist aber eine Designfrage
         return ok(Json.toJson(newProduct));

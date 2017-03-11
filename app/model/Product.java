@@ -5,10 +5,7 @@ import play.api.db.Database;
 import play.libs.Json;
 
 import javax.inject.Inject;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,18 +22,20 @@ public class Product {
     }
 
 
-    // Mocking Data (nur zu Testzwecken)
+
     // List ist ein Interface!
     private static List<Product> products;
+
+    // Mocking Data (nur zu Testzwecken)
     // statischer Initialisierer, somit gibt es diese Variable nur 1x, egal wieviele male man instanziert
-    static {
-        products = new ArrayList<Product>();
-        products.add(new Product("1111111111111","Paperclips", "description 1"));
-        products.add(new Product("2222222222222","Paperclips", "description 2"));
-        products.add(new Product("3333333333333","Paperclips", "description 3"));
-        products.add(new Product("4444444444444","Paperclips", "description 4"));
-        products.add(new Product("5555555555555","Paperclips", "description 5"));
-    }
+//    static {
+//        products = new ArrayList<Product>();
+//        products.add(new Product("1111111111111","Paperclips", "description 1"));
+//        products.add(new Product("2222222222222","Paperclips", "description 2"));
+//        products.add(new Product("3333333333333","Paperclips", "description 3"));
+//        products.add(new Product("4444444444444","Paperclips", "description 4"));
+//        products.add(new Product("5555555555555","Paperclips", "description 5"));
+//    }
 
     // Attribute
     public int id;
@@ -58,23 +57,69 @@ public class Product {
         this.description = description;
     }
 
+    /**
+     * TOSTRING
+     */
     public String toString() {
         return String.format("%s - %s", ean, name);
     }
 
 
+    /**
+     * GETTERS/SETTERS
+     */
+    public static List<Product> getProducts() {
+        return products;
+    }
+
+    public static void setProducts(List<Product> products) {
+        Product.products = products;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getEan() {
+        return ean;
+    }
+
+    public void setEan(String ean) {
+        this.ean = ean;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     //-----------------------------------
     // DAO Methoden
     //-----------------------------------
 
     public static List<Product> findAll(){
-// get connection
+        // get connection
         Connection connection = db.getConnection();
         Statement stmt = null;
 
-        // temporaere liste aller produkte
-        List<Product> products = new ArrayList<Product>();
+        // aktuelle liste aller produkte
+        products = null;
+        products = new ArrayList<Product>();
 
         try {
             stmt = connection.createStatement();
@@ -92,12 +137,77 @@ public class Product {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return products;
     }
 
+    /**
+     * ADDPRODUCT
+     * @param newProduct
+     * Achtung! newProduct als Parameter hat noch keine ID!
+     * Diese bekommen wir von der DB zurueck
+     */
     public static void addProduct(Product newProduct) {
+        // in die DB schreiben
+        newProduct.save();
+        // zur Liste hinzufuegen
         products.add(newProduct);
+
+    }
+
+    /**
+     * Speichert ein Objekt auf die Datenbank.
+     * - wenn ID leer ist, wird ein Insert gemacht
+     * - wenn ID vorhanden ist, wird ein Update gemacht
+     */
+    public void save()  {
+        System.out.println("....saving....");
+        // get connection
+        Connection connection = db.getConnection();
+        PreparedStatement preparedStatement = null;
+        String query = null;
+        //
+        if (this.id == 0) {
+            query = "insert into product (ean,name,description) "
+                    + "values (?, ?, ?)";
+        } else {
+            query = "update product set ean = ?, name = ?, description = ? "
+                    + "where id = ?";
+        }
+        try {
+             preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, this.ean);
+            preparedStatement.setString(2, this.name);
+            preparedStatement.setString(3, this.description);
+            if (id != 0) {
+                preparedStatement.setLong(4, this.id);
+            }
+            System.out.println("save query: " + preparedStatement.toString());
+            preparedStatement.executeUpdate();
+            // falls INSERT, sind wir am Resultat (Primary Key: ID) interessiert
+            ResultSet rs = preparedStatement.getGeneratedKeys();
+            if(rs.next()) {
+                int incrementId = rs.getInt(1);
+                if (incrementId > 0) {
+                    System.out.println("inserted with primary key ID: " +incrementId);
+                    this.setId(incrementId);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static Product findProduct(String searchEAN) {
