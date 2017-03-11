@@ -16,9 +16,11 @@ public class Product {
     // CompletionException: java.lang.NullPointerException
 
 
-
     // List ist ein Interface!
     private static List<Product> products;
+    static {
+        products = new ArrayList<Product>();
+    }
 
     // Mocking Data (nur zu Testzwecken)
     // statischer Initialisierer, somit gibt es diese Variable nur 1x, egal wieviele male man instanziert
@@ -38,7 +40,8 @@ public class Product {
     public String description;
 
     // Constructors
-    public Product() {}
+    public Product() {
+    }
     public Product(String ean, String name, String description) {
         this.ean = ean;
         this.name = name;
@@ -109,7 +112,7 @@ public class Product {
 
         try {
             stmt = connection.createStatement();
-            String sql = "select * from product";
+            String sql = "select * from product order by id";
             ResultSet rs = stmt.executeQuery(sql);
             // extract data
             while (rs.next()) {
@@ -143,7 +146,7 @@ public class Product {
         // in die DB schreiben
         newProduct.save(db);
         // zur Liste hinzufuegen
-        //products.add(newProduct);
+        products.add(newProduct);
 
     }
 

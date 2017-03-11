@@ -66,7 +66,21 @@ public class Products extends Controller{
         Product.addProduct(newProduct, db);
         // man kann es wieder zurueckgeben, ist aber eine Designfrage
         return ok(Json.toJson(newProduct));
+    }
 
+    /**
+     * MODIFY-PRODUCT
+     * @return
+     */
+    // hiermit bekommen wir den Request Body!
+    @BodyParser.Of(BodyParser.Json.class)
+    public Result modifyProduct(Integer id)  {
+        JsonNode json = request().body().asJson();
+        Product newProduct = Json.fromJson(json, Product.class);
+        // zur Produktliste hinzufuegen!
+        Product.addProduct(newProduct, db);
+        // man kann es wieder zurueckgeben, ist aber eine Designfrage
+        return ok(Json.toJson(newProduct));
     }
 
 
