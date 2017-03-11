@@ -1,10 +1,8 @@
 package model;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import play.api.db.Database;
-import play.libs.Json;
 
-import javax.inject.Inject;
+import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +12,8 @@ import java.util.List;
  */
 public class Product {
 
-    private static Database db;
-
-    @Inject
-    public Product(Database db) {
-        this.db = db;
-    }
+    // Die Methoden die db benuetzen, duerfen offenbar nicht static sein, sonst:
+    // CompletionException: java.lang.NullPointerException
 
 
 
@@ -68,13 +62,6 @@ public class Product {
     /**
      * GETTERS/SETTERS
      */
-    public static List<Product> getProducts() {
-        return products;
-    }
-
-    public static void setProducts(List<Product> products) {
-        Product.products = products;
-    }
 
     public int getId() {
         return id;
@@ -112,14 +99,13 @@ public class Product {
     // DAO Methoden
     //-----------------------------------
 
-    public static List<Product> findAll(){
+    public static List<Product> findAll(Database db){
         // get connection
         Connection connection = db.getConnection();
         Statement stmt = null;
 
         // aktuelle liste aller produkte
-        products = null;
-        products = new ArrayList<Product>();
+        List<Product> products = new ArrayList<Product>();
 
         try {
             stmt = connection.createStatement();
@@ -153,11 +139,11 @@ public class Product {
      * Achtung! newProduct als Parameter hat noch keine ID!
      * Diese bekommen wir von der DB zurueck
      */
-    public static void addProduct(Product newProduct) {
+    public static void addProduct(Product newProduct, Database db) {
         // in die DB schreiben
-        newProduct.save();
+        newProduct.save(db);
         // zur Liste hinzufuegen
-        products.add(newProduct);
+        //products.add(newProduct);
 
     }
 
@@ -166,7 +152,7 @@ public class Product {
      * - wenn ID leer ist, wird ein Insert gemacht
      * - wenn ID vorhanden ist, wird ein Update gemacht
      */
-    public void save()  {
+    public void save(Database db)  {
         System.out.println("....saving....");
         // get connection
         Connection connection = db.getConnection();
@@ -210,7 +196,8 @@ public class Product {
         }
     }
 
-    public static Product findProduct(String searchEAN) {
+    public static Product findProduct(String searchEAN, Database db) {
+        List<Product> products = findAll(db);
         for (Product product : products) {
             if (product.ean.equals(searchEAN)) {
                 return product;

@@ -1,22 +1,15 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import model.Product;
 import play.api.db.Database;
 import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
+
+import javax.inject.Inject;
+import java.util.List;
 
 /**
  * CONTROLLER
@@ -27,7 +20,7 @@ public class Products extends Controller{
 
 
 
-    private Database db;
+    private static Database db;
 
     @Inject
     public Products(Database db) {
@@ -35,12 +28,13 @@ public class Products extends Controller{
     }
 
 
+
     /**
      * LIST
      * @return
      */
     public Result list() {
-        List<Product> products = Product.findAll();
+        List<Product> products = new Product().findAll(db);
         //
         // JsonNode : Jackson
         // Json: Json Helper aus play.libs
@@ -69,7 +63,7 @@ public class Products extends Controller{
         JsonNode json = request().body().asJson();
         Product newProduct = Json.fromJson(json, Product.class);
         // zur Produktliste hinzufuegen!
-        Product.addProduct(newProduct);
+        Product.addProduct(newProduct, db);
         // man kann es wieder zurueckgeben, ist aber eine Designfrage
         return ok(Json.toJson(newProduct));
 

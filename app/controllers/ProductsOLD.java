@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.List;
 
-import model.Product;
+import model.ProductOLD;
 import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
@@ -19,7 +19,7 @@ public class ProductsOLD extends Controller{
 
 
     public Result list() {
-        List<Product> products = Product.findAll();
+        List<ProductOLD> products = ProductOLD.findAll();
 
         // JsonNode : Jackson
         // Json: Json Helper aus play.libs
@@ -37,9 +37,9 @@ public class ProductsOLD extends Controller{
     @BodyParser.Of(BodyParser.Json.class)
     public Result newProduct() {
         JsonNode json = request().body().asJson();
-        Product newProduct = Json.fromJson(json, Product.class);
+        ProductOLD newProduct = Json.fromJson(json, ProductOLD.class);
         // zur Produktliste hinzufuegen!
-        Product.addProduct(newProduct);
+        ProductOLD.addProduct(newProduct);
         // man kann es wieder zurueckgeben, ist aber eine Designfrage
         return ok(Json.toJson(newProduct));
 
