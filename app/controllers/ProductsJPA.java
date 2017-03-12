@@ -3,12 +3,15 @@ package controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import model.ProductJPA;
 import play.api.db.Database;
+import play.db.jpa.JPAApi;
+import play.db.jpa.Transactional;
 import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 import java.util.List;
 
 /**
@@ -21,37 +24,30 @@ public class ProductsJPA extends Controller{
 
 
     private static Database db;
+    private static JPAApi jpaApi;
 
     @Inject
     public ProductsJPA(Database db) {
         this.db = db;
     }
 
-
-
     /**
      * LIST
      * @return
      */
+    @Transactional(readOnly = true)
     public Result listProducts() {
+
+        EntityManager em = jpaApi.em();
+
         List<ProductJPA> products = new ProductJPA().findAll(db);
         //
         // JsonNode : Jackson
         // Json: Json Helper aus play.libs
         JsonNode json = Json.toJson(products);
-
         return ok(json);
     }
 
-
-    /**
-     * DETAILS
-     * @param ean
-     * @return
-     */
-    public Result details(String ean) {
-        return ok();
-    }
 
     /**
      * NEW-PRODUCT
@@ -59,6 +55,7 @@ public class ProductsJPA extends Controller{
      */
     // hiermit bekommen wir den Request Body!
     @BodyParser.Of(BodyParser.Json.class)
+    @Transactional
     public Result newProduct()  {
         JsonNode json = request().body().asJson();
         ProductJPA newProduct = Json.fromJson(json, ProductJPA.class);
@@ -74,6 +71,7 @@ public class ProductsJPA extends Controller{
      */
     // hiermit bekommen wir den Request Body!
     @BodyParser.Of(BodyParser.Json.class)
+    @Transactional
     public Result modifyProduct(Integer id)  {
         JsonNode json = request().body().asJson();
         ProductJPA modifiedProduct = Json.fromJson(json, ProductJPA.class);
@@ -88,6 +86,7 @@ public class ProductsJPA extends Controller{
      * @return
      */
     // hier benoetigen wir keinen Request Body, die ID steht in der URL
+    @Transactional(readOnly = true)
     public Result showProduct(Integer id)  {
         ProductJPA product = ProductJPA.findProductById(id, db);
         // man kann es wieder zurueckgeben, ist aber eine Designfrage

@@ -1,7 +1,13 @@
 package model;
 
+import com.avaje.ebean.Model;
 import play.api.db.Database;
+import play.data.validation.Constraints;
+import play.db.jpa.JPAApi;
 
+import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.Id;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +15,10 @@ import java.util.List;
 /**
  * MODEL
  */
-public class ProductJPA {
+@Entity
+public class ProductJPA extends Model{
+
+    private static JPAApi jpaApi;
 
     // Die Methoden die db benuetzen, duerfen offenbar nicht static sein, sonst:
     // CompletionException: java.lang.NullPointerException
@@ -34,8 +43,12 @@ public class ProductJPA {
 //    }
 
     // Attribute
+    @Id
+    //@Constraints.Min(10)
+    //@Formats.DateTime(pattern="dd/MM/yyyy")
     public int id;
     public String ean;
+    @Constraints.Required
     public String name;
     public String description;
 
@@ -102,7 +115,42 @@ public class ProductJPA {
     // DAO Methoden
     //-----------------------------------
 
+    /**
+     * FINDER (JPA)
+     */
+    public static Finder<Integer, ProductJPA> find = new Finder<Integer,ProductJPA>(ProductJPA.class);
+
+    // JPA BEISPIELE
+    /*
+    // Find all products
+    List<ProductJPA> tasks = ProductJPA.find.all();
+
+    // Find a product by ID
+    ProductJPA anyTask = ProductJPA.find.byId(34L);
+
+    // Delete a product by ID
+    ProductJPA.find.ref(34L).delete();
+
+    // More complex product query
+    List<ProductJPA> cocoTasks = ProductJPA.find.where()
+            .ilike("name", "%coco%")
+            .orderBy("dueDate asc")
+            .findPagedList(1, 25)
+            .getList();
+     */
+
+
     public static List<ProductJPA> findAll(Database db){
+        EntityManager em = jpaApi.em();
+
+        // Created implicit transaction
+        List<ProductJPA> tasks = ProductJPA.find.all();
+        // Transaction committed or rolled back
+        //task.done = true;
+        // Created implicit transaction
+        //task.save();
+        // Transaction committed or rolled back
+
         // get connection
         Connection connection = db.getConnection();
         Statement stmt = null;
@@ -135,6 +183,9 @@ public class ProductJPA {
         }
         return products;
     }
+
+
+
 
     /**
      * ADDPRODUCT
