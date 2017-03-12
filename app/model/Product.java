@@ -181,7 +181,7 @@ public class Product {
                     + "where id = ?";
         }
         try {
-             preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, this.ean);
             preparedStatement.setString(2, this.name);
             preparedStatement.setString(3, this.description);
@@ -210,13 +210,47 @@ public class Product {
         }
     }
 
-    public static Product findProduct(String searchEAN, Database db) {
-        List<Product> products = findAll(db);
-        for (Product product : products) {
-            if (product.ean.equals(searchEAN)) {
-                return product;
+//    public static Product findProductByEan(String searchEAN, Database db) {
+//        return null;
+//    }
+
+    public static Product findProductById(Integer id, Database db) {
+        System.out.println("....get by id....");
+        // get connection
+        Connection connection = db.getConnection();
+        PreparedStatement preparedStatement = null;
+        String query = null;
+        Product product = null;
+        //
+        if (id > 0) {
+            try {
+                query = "select * from product where id = ? ";
+                preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                preparedStatement.setInt(1, id);
+                System.out.println("find query: " + preparedStatement.toString());
+                ResultSet rs = preparedStatement.executeQuery();
+                while (rs.next()){
+                    System.out.println("Row selektiert: " +rs.getString("name"));
+                    String ean = rs.getString("ean");
+                    String name = rs.getString("name");
+                    String description = rs.getString("description");
+                    // generate new Product
+                    product = new Product(id,ean,name,description);
+                }
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
-        }
+            return product;
+        } // id > 0
         return null;
     }
+
+
 }

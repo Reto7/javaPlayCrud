@@ -3,10 +3,11 @@
 
 # MUSS MIT TABULATOREN GESCHRIEBEN WERDEN !!
 
-GET     /products                     controllers.Products.list
-GET     /products/                    controllers.Products.list
+GET     /products                     controllers.Products.listProducts
+GET     /products/                    controllers.Products.listProducts
 POST    /products/new                 controllers.Products.newProduct
 POST    /product/:id                  controllers.Products.modifyProduct(id: Integer)  # TODO: hier EAN anstatt ID
+GET     /product/:id                  controllers.Products.showProduct(id: Integer)
 
 # TODO
 #GET  /products/:ean  controllers.Products.details(ean: String)

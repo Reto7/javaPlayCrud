@@ -33,7 +33,7 @@ public class Products extends Controller{
      * LIST
      * @return
      */
-    public Result list() {
+    public Result listProducts() {
         List<Product> products = new Product().findAll(db);
         //
         // JsonNode : Jackson
@@ -83,6 +83,20 @@ public class Products extends Controller{
         return ok(Json.toJson(modifiedProduct));
     }
 
+    /**
+     * SHOW-PRODUCT
+     * @return
+     */
+    // hiermit bekommen wir den Request Body!
+    @BodyParser.Of(BodyParser.Json.class)
+    public Result showProduct(Integer id)  {
+        JsonNode json = request().body().asJson();
+        Product tempProduct = Json.fromJson(json, Product.class); // hier bekommen wir nur die ID, sonst nichts
+        // zur Produktliste hinzufuegen!
+        Product product = Product.findProductById(tempProduct.getId(), db);
+        // man kann es wieder zurueckgeben, ist aber eine Designfrage
+        return ok(Json.toJson(product));
+    }
 
 
 }
