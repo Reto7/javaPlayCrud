@@ -24,3 +24,6 @@ fork in run := true
 
 // fuer JPA
 lazy val myProject = (project in file(".")).enablePlugins(PlayJava, PlayEbean)
+
+
+fork in run := true

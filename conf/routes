@@ -11,3 +11,5 @@ GET     /product/:id                  controllers.ProductsJPA.showProduct(id: In
 
 #TODO
 #GET  /products/:ean  controllers.Products.details(ean: String)
+
+GET     /test                           controllers.ReportsAsync.index
