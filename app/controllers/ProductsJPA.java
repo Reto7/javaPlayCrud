@@ -1,7 +1,7 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import model.Product;
+import model.ProductJPA;
 import play.api.db.Database;
 import play.libs.Json;
 import play.mvc.BodyParser;
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * CONTROLLER
  */
-public class Products extends Controller{
+public class ProductsJPA extends Controller{
 
     // das NEUE PLAY Framework verlangt hier im Controller KEINE STATISCHEN METHODEN, ergibt sonst Fehler!
 
@@ -23,7 +23,7 @@ public class Products extends Controller{
     private static Database db;
 
     @Inject
-    public Products(Database db) {
+    public ProductsJPA(Database db) {
         this.db = db;
     }
 
@@ -34,7 +34,7 @@ public class Products extends Controller{
      * @return
      */
     public Result listProducts() {
-        List<Product> products = new Product().findAll(db);
+        List<ProductJPA> products = new ProductJPA().findAll(db);
         //
         // JsonNode : Jackson
         // Json: Json Helper aus play.libs
@@ -61,9 +61,9 @@ public class Products extends Controller{
     @BodyParser.Of(BodyParser.Json.class)
     public Result newProduct()  {
         JsonNode json = request().body().asJson();
-        Product newProduct = Json.fromJson(json, Product.class);
+        ProductJPA newProduct = Json.fromJson(json, ProductJPA.class);
         // zur Produktliste hinzufuegen!
-        Product.addProduct(newProduct, db);
+        ProductJPA.addProduct(newProduct, db);
         // man kann es wieder zurueckgeben, ist aber eine Designfrage
         return ok(Json.toJson(newProduct));
     }
@@ -76,9 +76,9 @@ public class Products extends Controller{
     @BodyParser.Of(BodyParser.Json.class)
     public Result modifyProduct(Integer id)  {
         JsonNode json = request().body().asJson();
-        Product modifiedProduct = Json.fromJson(json, Product.class);
+        ProductJPA modifiedProduct = Json.fromJson(json, ProductJPA.class);
         // zur Produktliste hinzufuegen!
-        Product.modifyProduct(modifiedProduct, db);
+        ProductJPA.modifyProduct(modifiedProduct, db);
         // man kann es wieder zurueckgeben, ist aber eine Designfrage
         return ok(Json.toJson(modifiedProduct));
     }
@@ -89,7 +89,7 @@ public class Products extends Controller{
      */
     // hier benoetigen wir keinen Request Body, die ID steht in der URL
     public Result showProduct(Integer id)  {
-        Product product = Product.findProductById(id, db);
+        ProductJPA product = ProductJPA.findProductById(id, db);
         // man kann es wieder zurueckgeben, ist aber eine Designfrage
         return ok(Json.toJson(product));
     }

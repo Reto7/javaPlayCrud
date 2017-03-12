@@ -2,7 +2,6 @@ package model;
 
 import play.api.db.Database;
 
-import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,17 +9,17 @@ import java.util.List;
 /**
  * MODEL
  */
-public class Product {
+public class ProductJPA {
 
     // Die Methoden die db benuetzen, duerfen offenbar nicht static sein, sonst:
     // CompletionException: java.lang.NullPointerException
 
 
     // List ist ein Interface!
-    private static List<Product> products;
+    private static List<ProductJPA> products;
     // statischer Initialisierer,
     static {
-        products = new ArrayList<Product>();
+        products = new ArrayList<ProductJPA>();
     }
 
     // Mocking Data (nur zu Testzwecken)
@@ -41,14 +40,14 @@ public class Product {
     public String description;
 
     // Constructors
-    public Product() {
+    public ProductJPA() {
     }
-    public Product(String ean, String name, String description) {
+    public ProductJPA(String ean, String name, String description) {
         this.ean = ean;
         this.name = name;
         this.description = description;
     }
-    public Product(int id, String ean, String name, String description) {
+    public ProductJPA(int id, String ean, String name, String description) {
         this.id = id;
         this.ean = ean;
         this.name = name;
@@ -103,13 +102,13 @@ public class Product {
     // DAO Methoden
     //-----------------------------------
 
-    public static List<Product> findAll(Database db){
+    public static List<ProductJPA> findAll(Database db){
         // get connection
         Connection connection = db.getConnection();
         Statement stmt = null;
 
         // aktuelle liste aller produkte
-        List<Product> products = new ArrayList<Product>();
+        List<ProductJPA> products = new ArrayList<ProductJPA>();
 
         try {
             stmt = connection.createStatement();
@@ -122,7 +121,7 @@ public class Product {
                 String name = rs.getString("name");
                 String description = rs.getString("description");
                 // generate new Product
-                Product product = new Product(id,ean,name,description);
+                ProductJPA product = new ProductJPA(id,ean,name,description);
                 products.add(product);
             }
         } catch (SQLException e) {
@@ -143,7 +142,7 @@ public class Product {
      * Achtung! newProduct als Parameter hat noch keine ID!
      * Diese bekommen wir von der DB zurueck
      */
-    public static void addProduct(Product newProduct, Database db) {
+    public static void addProduct(ProductJPA newProduct, Database db) {
         // in die DB schreiben
         newProduct.save(db);
         // zur Liste hinzufuegen
@@ -156,7 +155,7 @@ public class Product {
      * Achtung! newProduct als Parameter hat noch keine ID!
      * Diese bekommen wir von der DB zurueck
      */
-    public static void modifyProduct(Product modifyedProduct, Database db) {
+    public static void modifyProduct(ProductJPA modifyedProduct, Database db) {
         // in die DB schreiben
         modifyedProduct.save(db);
     }
@@ -214,13 +213,13 @@ public class Product {
 //        return null;
 //    }
 
-    public static Product findProductById(Integer id, Database db) {
+    public static ProductJPA findProductById(Integer id, Database db) {
         System.out.println("....get by id....");
         // get connection
         Connection connection = db.getConnection();
         PreparedStatement preparedStatement = null;
         String query = null;
-        Product product = null;
+        ProductJPA product = null;
         //
         if (id > 0) {
             try {
@@ -235,7 +234,7 @@ public class Product {
                     String name = rs.getString("name");
                     String description = rs.getString("description");
                     // generate new Product
-                    product = new Product(id,ean,name,description);
+                    product = new ProductJPA(id,ean,name,description);
                 }
                 rs.close();
             } catch (SQLException e) {
