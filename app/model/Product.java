@@ -225,7 +225,7 @@ public class Product {
         if (id > 0) {
             try {
                 query = "select * from product where id = ? ";
-                preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                preparedStatement = connection.prepareStatement(query);
                 preparedStatement.setInt(1, id);
                 System.out.println("find query: " + preparedStatement.toString());
                 ResultSet rs = preparedStatement.executeQuery();

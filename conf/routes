@@ -2,13 +2,12 @@
 # This file defines all application routes (Higher priority routes first)
 
 # MUSS MIT TABULATOREN GESCHRIEBEN WERDEN !!
-
 GET     /products                     controllers.Products.listProducts
 GET     /products/                    controllers.Products.listProducts
 POST    /products/new                 controllers.Products.newProduct
-POST    /product/:id                  controllers.Products.modifyProduct(id: Integer)  # TODO: hier EAN anstatt ID
+POST    /product/:id                  controllers.Products.modifyProduct(id: Integer)
 GET     /product/:id                  controllers.Products.showProduct(id: Integer)
 
-# TODO
+
+#TODO
 #GET  /products/:ean  controllers.Products.details(ean: String)
-#POST /products/      controllers.Products.save

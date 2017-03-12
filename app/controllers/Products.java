@@ -87,13 +87,9 @@ public class Products extends Controller{
      * SHOW-PRODUCT
      * @return
      */
-    // hiermit bekommen wir den Request Body!
-    @BodyParser.Of(BodyParser.Json.class)
+    // hier benoetigen wir keinen Request Body, die ID steht in der URL
     public Result showProduct(Integer id)  {
-        JsonNode json = request().body().asJson();
-        Product tempProduct = Json.fromJson(json, Product.class); // hier bekommen wir nur die ID, sonst nichts
-        // zur Produktliste hinzufuegen!
-        Product product = Product.findProductById(tempProduct.getId(), db);
+        Product product = Product.findProductById(id, db);
         // man kann es wieder zurueckgeben, ist aber eine Designfrage
         return ok(Json.toJson(product));
     }
