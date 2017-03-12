@@ -17,3 +17,8 @@ libraryDependencies ++= Seq(
 
 
 fork in run := true
+
+
+// fuer JPA: Running Play in development mode while using JPA will work fine,
+// but in order to deploy the application you will need to add "PlayKeys.externalizeResources := false" to your build.sbt file.
+
