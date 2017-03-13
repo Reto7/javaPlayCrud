@@ -2,14 +2,21 @@
 # This file defines all application routes (Higher priority routes first)
 
 # MUSS MIT TABULATOREN GESCHRIEBEN WERDEN !!
-GET     /products                     controllers.ProductsJPA.listProducts
-GET     /products/                    controllers.ProductsJPA.listProducts
-POST    /products/new                 controllers.ProductsJPA.newProduct
-POST    /product/:id                  controllers.ProductsJPA.modifyProduct(id: Integer)
-GET     /product/:id                  controllers.ProductsJPA.showProduct(id: Integer)
+GET     /products                     controllers.ProductsJPA.getProducts
+GET     /products/                    controllers.ProductsJPA.getProducts
+POST    /products/new                 controllers.ProductsJPA.addProduct
+#POST    /product/:id                  controllers.ProductsJPA.modifyProduct(id: Integer)
+#GET     /product/:id                  controllers.ProductsJPA.showProduct(id: Integer)
+
+
+#GET     /products                     controllers.ProductsJPA.listProducts
+#GET     /products/                    controllers.ProductsJPA.listProducts
+#POST    /products/new                 controllers.ProductsJPA.newProduct
+#POST    /product/:id                  controllers.ProductsJPA.modifyProduct(id: Integer)
+#GET     /product/:id                  controllers.ProductsJPA.showProduct(id: Integer)
 
 
 #TODO
 #GET  /products/:ean  controllers.Products.details(ean: String)
 
-GET     /test                           controllers.ReportsAsync.index
+
