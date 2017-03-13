@@ -40,6 +40,18 @@ public class ProductsJPA extends Controller{
         return ok(Json.toJson(product));
     }
 
+    // TODO das hier funktioniert nicht !
+    @Transactional
+    public Result modifyProduct(Integer id) {
+        // die id benoetigen wir hier gar nicht!
+        // allenfalls zum Abgleich mit den BODY Daten
+        ProductJPA product = formFactory.form(ProductJPA.class).bindFromRequest().get();
+        jpaApi.em().persist(product);
+        //jpaApi.em().flush();
+        //return redirect(routes.ProductsJPA.index());
+        return ok(Json.toJson(product));
+    }
+
     @Transactional(readOnly = true)
     public Result getProducts() {
         List<ProductJPA> productsList = (List<ProductJPA>) jpaApi.em().createQuery("select p from ProductJPA p").getResultList();
@@ -51,7 +63,7 @@ public class ProductsJPA extends Controller{
         List<ProductJPA> productsList = (List<ProductJPA>) jpaApi.em().createQuery("select p from ProductJPA p where id = :id")
                 .setParameter("id", id)
                 .setMaxResults(10)
-                .getResultList();
+                .getResultList(); // TODO hier koennte man auch getSingleResult() verwenden!
         if (productsList.size() == 1 ) {
             return ok(Json.toJson(productsList));
         }  else {
