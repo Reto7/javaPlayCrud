@@ -35,6 +35,7 @@ public class ProductsJPA extends Controller{
     public Result addProduct() {
         ProductJPA product = formFactory.form(ProductJPA.class).bindFromRequest().get();
         jpaApi.em().persist(product);
+        //jpaApi.em().flush();
         //return redirect(routes.ProductsJPA.index());
         return ok(Json.toJson(product));
     }
@@ -45,5 +46,10 @@ public class ProductsJPA extends Controller{
         return ok(Json.toJson(productsList));
     }
 
+    @Transactional(readOnly = true)
+    public Result getProduct(Integer id) {
+        ProductJPA product = (ProductJPA) jpaApi.em().createQuery("select p from ProductJPA p where id = " +id).getResultList();
+        return ok(Json.toJson(product));
+    }
 
 }

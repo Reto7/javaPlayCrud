@@ -6,7 +6,7 @@ GET     /products                     controllers.ProductsJPA.getProducts
 GET     /products/                    controllers.ProductsJPA.getProducts
 POST    /products/new                 controllers.ProductsJPA.addProduct
 #POST    /product/:id                  controllers.ProductsJPA.modifyProduct(id: Integer)
-#GET     /product/:id                  controllers.ProductsJPA.showProduct(id: Integer)
+GET     /product/:id                  controllers.ProductsJPA.getProduct(id: Integer)
 
 
 #GET     /products                     controllers.ProductsJPA.listProducts
