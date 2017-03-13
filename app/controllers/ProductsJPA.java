@@ -48,8 +48,15 @@ public class ProductsJPA extends Controller{
 
     @Transactional(readOnly = true)
     public Result getProduct(Integer id) {
-        ProductJPA product = (ProductJPA) jpaApi.em().createQuery("select p from ProductJPA p where id = " +id).getResultList();
-        return ok(Json.toJson(product));
+        List<ProductJPA> productsList = (List<ProductJPA>) jpaApi.em().createQuery("select p from ProductJPA p where id = :id")
+                .setParameter("id", id)
+                .setMaxResults(10)
+                .getResultList();
+        if (productsList.size() == 1 ) {
+            return ok(Json.toJson(productsList));
+        }  else {
+            return ok("dar nur 1 Element sein");
+        }
     }
 
 }
