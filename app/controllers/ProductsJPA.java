@@ -41,7 +41,7 @@ public class ProductsJPA extends Controller{
 
     @Transactional(readOnly = true)
     public Result getProducts() {
-        List<ProductJPA> productsList = (List<ProductJPA>) jpaApi.em().createQuery("select p from product p").getResultList();
+        List<ProductJPA> productsList = (List<ProductJPA>) jpaApi.em().createQuery("select p from ProductJPA p").getResultList();
         return ok(Json.toJson(productsList));
     }
 

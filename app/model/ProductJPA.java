@@ -8,7 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- * MODEL
+ * MODEL , Achtung bei JPA muss die Tabelle genauso heissen wie die Model Klasse !
  */
 @Entity
 public class ProductJPA {   //extends Model{
