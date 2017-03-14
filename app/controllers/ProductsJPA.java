@@ -56,7 +56,10 @@ public class ProductsJPA extends Controller{
     }
 
 
-    // TODO das hier funktioniert nicht !
+    // TODO das hier funktioniert nicht ! DETACHTED!
+    // gem. Norman:
+    // 1. mit EM objekt lesen (damit attached/managed)
+    // 2. mit getter/setter objekt veraendern (ein new product geht nicht)
     @Transactional
     public Result modifyProduct(Integer id) {
         System.out.println("MODIFY");
