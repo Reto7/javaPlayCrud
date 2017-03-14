@@ -4,7 +4,7 @@
 # MUSS MIT TABULATOREN GESCHRIEBEN WERDEN !!
 GET     /products                     controllers.ProductsJPA.getProducts
 GET     /products/                    controllers.ProductsJPA.getProducts
-POST    /products/new                 controllers.ProductsJPA.addProduct
+POST    /products/new                 controllers.ProductsJPA.addProduct2
 POST    /product/:id                  controllers.ProductsJPA.modifyProduct(id: Integer)
 GET     /product/:id                  controllers.ProductsJPA.getProduct(id: Integer)
 

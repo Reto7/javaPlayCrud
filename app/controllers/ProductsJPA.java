@@ -1,10 +1,13 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import model.ProductJPA;
 import play.data.FormFactory;
 import play.db.jpa.JPAApi;
 import play.db.jpa.Transactional;
 import play.libs.Json;
+import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -39,13 +42,28 @@ public class ProductsJPA extends Controller{
         //return redirect(routes.ProductsJPA.index());
         return ok(Json.toJson(product));
     }
+    // hiermit bekommen wir den Request Body!
+    @BodyParser.Of(BodyParser.Json.class)
+    @Transactional
+    public Result addProduct2() {
+        JsonNode json = request().body().asJson();
+        ProductJPA product = Json.fromJson(json, ProductJPA.class);
+        //ProductJPA product = formFactory.form(ProductJPA.class).bindFromRequest().get();
+        jpaApi.em().persist(product);
+        //jpaApi.em().flush();
+        //return redirect(routes.ProductsJPA.index());
+        return ok(Json.toJson(product));
+    }
+
 
     // TODO das hier funktioniert nicht !
     @Transactional
     public Result modifyProduct(Integer id) {
+        System.out.println("MODIFY");
         // die id benoetigen wir hier gar nicht!
         // allenfalls zum Abgleich mit den BODY Daten
         ProductJPA product = formFactory.form(ProductJPA.class).bindFromRequest().get();
+        System.out.println("ID:"+product.getId());
         jpaApi.em().persist(product);
         //jpaApi.em().flush();
         //return redirect(routes.ProductsJPA.index());
