@@ -20,3 +20,5 @@ GET     /product/:id                  controllers.ProductsJPA.getProduct(id: Int
 #GET  /products/:ean  controllers.Products.details(ean: String)
 
 
+GET     /reports                       controllers.Reports.listReports
+
