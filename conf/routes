@@ -22,3 +22,5 @@ GET     /product/:id                  controllers.ProductsJPA.getProduct(id: Int
 
 GET     /reports                       controllers.Reports.listReports
 
+GET     /aktienkurs/:isin              controllers.AktienKursController.getKursByISIN(isin: String)
+
