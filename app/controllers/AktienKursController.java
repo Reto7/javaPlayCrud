@@ -14,6 +14,10 @@ import play.mvc.Result;
 
 /**
  * Created by user on 17.03.2017.
+ *
+ * http://localhost:9000/aktienkurs/ABC    -- response delay 5 Sek
+ * http://localhost:9000/aktienkurs/NESN   -- response immer sofort
+ *
  */
 @Singleton
 public class AktienKursController extends Controller {
